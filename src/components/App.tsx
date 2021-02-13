@@ -58,7 +58,12 @@ class App extends React.Component<{}, AppState> {
   }
 
   setResults = async (value: string) => {
-    this.setState({ isLoading: true, pages: [], resultsCount: 0 })
+    this.setState({
+      isLoading: true,
+      pages: [],
+      resultsCount: 0,
+      currentPageIndex: 1,
+    })
 
     const users = await queryGithub({
       query: value,
