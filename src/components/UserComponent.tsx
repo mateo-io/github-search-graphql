@@ -1,20 +1,20 @@
-import React from "react";
-import styled from "@emotion/styled";
+import React from "react"
+import styled from "@emotion/styled"
 
 // local components
-import { Box } from "../styles/common";
-import * as colors from "../styles/colors";
-import { UserType } from "../types/common";
+import { Box } from "../styles/common"
+import * as colors from "../styles/colors"
+import { UserType } from "../types/common"
 
 export default class UserComponent extends React.PureComponent<UserType> {
   constructor(props: UserType) {
-    super(props);
+    super(props)
 
-    this.state = {};
+    this.state = {}
   }
 
   render() {
-    const { avatarUrl, login, name, location, bio } = this.props;
+    const { avatarUrl, login, name, location, bio } = this.props
 
     return (
       <Wrapper onClick={() => window.open(`//github.com/${login}`)}>
@@ -23,18 +23,30 @@ export default class UserComponent extends React.PureComponent<UserType> {
           <P>{login}</P>
         </CenteredBox>
         <CenteredBox>
-          <P>{bio}</P>
+          <P>{bio ? bio : "No bio"}</P>
         </CenteredBox>
         <CenteredBox>
-          <BoldP>{name}</BoldP>
-          <P>NAME</P>
+          {name ? (
+            <React.Fragment>
+              <BoldP>{name}</BoldP>
+              <InformationP>NAME</InformationP>
+            </React.Fragment>
+          ) : (
+            <P>No name</P>
+          )}
         </CenteredBox>
         <CenteredBox>
-          <BoldP>{location}</BoldP>
-          <P>LOCATION</P>
+          {location ? (
+            <React.Fragment>
+              <BoldP>{location}</BoldP>
+              <InformationP>LOCATION</InformationP>
+            </React.Fragment>
+          ) : (
+            <P>No location</P>
+          )}
         </CenteredBox>
       </Wrapper>
-    );
+    )
   }
 }
 
@@ -43,37 +55,51 @@ const Wrapper = styled.div`
   width: 100%;
   display: flex;
   cursor: pointer;
+  position: relative;
 
   &:hover {
     opacity: 0.9;
     background: ${colors.secondary};
+    p {
+      color: white;
+    }
   }
-`;
+
+  &:after {
+    content: "";
+    position: absolute;
+    bottom: 0px;
+    width: 80%;
+    height: 1px;
+    left: 36px;
+    background-color: ${colors.primary};
+  }
+`
 
 const P = styled.p`
   margin-top: 8px;
-  font-weight: 500;
   color: ${colors.black};
   font-size: 13px;
   flex: 0 0 20px;
-`;
+`
 
-const BoldP = styled.p`
-  color: ${colors.blue};
+const InformationP = styled(P)`
+  color: ${colors.grey};
+`
+
+const BoldP = styled(P)`
   font-size: 16px;
-  font-weight: 500;
-  flex: 0 0 20px;
   margin-bottom: 0;
-`;
+`
 
 const Img = styled.img`
   width: 70px;
   border-radius: 99%;
-`;
+`
 
 const CenteredBox = styled(Box)`
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-`;
+`

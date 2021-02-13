@@ -1,10 +1,10 @@
-import React from "react";
-import { Paper, UsersWrapper } from "../styles/common";
-import { UserType } from "../types/common";
-import UserComponent from "./UserComponent";
+import React from "react"
+import { Paper, UsersWrapper } from "../styles/common"
+import { UserType } from "../types/common"
+import UserComponent from "./UserComponent"
 
 const UsersView = (props: { users: UserType[] }) => {
-  const { users } = props;
+  const { users } = props
   return (
     <UsersWrapper>
       <Paper>
@@ -13,7 +13,7 @@ const UsersView = (props: { users: UserType[] }) => {
         ))}
       </Paper>
     </UsersWrapper>
-  );
-};
+  )
+}
 
-export default UsersView;
+export default UsersView

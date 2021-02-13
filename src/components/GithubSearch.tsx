@@ -1,29 +1,41 @@
-import React from "react";
-import styled from "@emotion/styled";
-import * as colors from "../styles/colors";
-import { Paper, P } from "../styles/common";
+import React from "react"
+import styled from "@emotion/styled"
+import * as colors from "../styles/colors"
+import { Paper, P } from "../styles/common"
 
 const GithubSearch = (props: { callback: (v: string) => void }) => {
+  const clearFocus = () => {
+    const element = document.getElementById("search")! as HTMLInputElement
+    element.value = ""
+  }
   return (
-    <div>
-      <CustomPaper>
-        <P>Search for your favorite user</P>
+    <CustomPaper>
+      <Wrapper>
+        <Parragraph>Search for your favorite user! 💫</Parragraph>
 
         <SearchInput
           placeholder="mateo-io..."
+          id="search"
+          onFocus={() => clearFocus()}
           onChange={(e) => props.callback(e.target.value)}
         />
-      </CustomPaper>
-    </div>
-  );
-};
+      </Wrapper>
+    </CustomPaper>
+  )
+}
 
-const CustomPaper = styled(Paper)`
-  margin-top: 4em;
+const Wrapper = styled("div")`
   padding: 12px;
+  text-align: left;
+  margin-top: 24px;
+`
 
-  //   background-color: ${colors.primary};
-`;
+const Parragraph = styled(P)`
+  font-weight: 900;
+  margin-left: 12px;
+`
+
+const CustomPaper = styled(Paper)``
 
 export const SearchInput = styled.input`
   height: 35px;
@@ -37,5 +49,5 @@ export const SearchInput = styled.input`
     outline: none !important;
     border: 1px solid ${colors.blue};
   }
-`;
-export default GithubSearch;
+`
+export default GithubSearch

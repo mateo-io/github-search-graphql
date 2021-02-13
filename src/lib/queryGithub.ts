@@ -1,24 +1,23 @@
-import { ApolloClient, InMemoryCache, gql } from "@apollo/client";
-import { UserType } from "../types/common";
+import { ApolloClient, InMemoryCache, gql } from "@apollo/client"
+import { UserType } from "../types/common"
 
-const GITHUB_ENDPOINT = "https://api.github.com/graphql";
-const key = "5dc6fc93446cce745c235276b57ff47ffed8c0e7";
+const GITHUB_ENDPOINT = "https://api.github.com/graphql"
 
 const client = new ApolloClient({
   uri: GITHUB_ENDPOINT,
-  headers: { authorization: `Bearer ${key}` },
+  headers: { authorization: `Bearer ${process.env.REACT_APP_API_KEY}` },
   cache: new InMemoryCache(),
-});
+})
 
-type UserQueryResult = Array<UserType>;
+type UserQueryResult = Array<UserType>
 
 type QueryParams = {
-  query: string;
-  firstElements: number;
-};
+  query: string
+  firstElements: number
+}
 
 const queryGithubRequest = async (params: QueryParams): Promise<any> => {
-  const { query, firstElements } = params;
+  const { query, firstElements } = params
   const response = await client.query({
     query: gql`
         query getUser {
@@ -36,22 +35,22 @@ const queryGithubRequest = async (params: QueryParams): Promise<any> => {
           }
         }
       `,
-  });
+  })
 
-  console.log(`queryGithub response OK`);
-  return response;
-};
+  console.log(`queryGithub response OK`)
+  return response
+}
 
 export const queryGithub = async (
   params: QueryParams
 ): Promise<UserQueryResult> => {
-  let data;
+  let data
 
   try {
-    data = await queryGithubRequest(params);
-    return data["data"]["search"]["nodes"];
+    data = await queryGithubRequest(params)
+    return data["data"]["search"]["nodes"]
   } catch (error) {
-    console.error(`queryGithub failed to fetch - ${error}`);
-    return [];
+    console.error(`queryGithub failed to fetch - ${error}`)
+    return []
   }
-};
+}
