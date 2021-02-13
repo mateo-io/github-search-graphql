@@ -8,7 +8,7 @@ const ResultsCount = (props: { resultsCount: number }) => {
     return null
   }
 
-  const isPlural = resultsCount != 1
+  const isPlural = resultsCount !== 1
   const resultsWord = isPlural ? "results" : "result"
 
   return (

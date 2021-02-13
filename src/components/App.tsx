@@ -8,6 +8,7 @@ import GithubSearch from "./GithubSearch"
 import UsersView from "./UsersView"
 import Footer from "./Footer"
 import Pagination from "./Pagination"
+import LoaderComponent from "./Loader"
 
 // misc
 import "../styles/App.css"
@@ -20,6 +21,8 @@ import * as colors from "../styles/colors"
 import logo from "../assets/logo.png"
 import ResultsCount from "./ResultsCount"
 
+import "react-loader-spinner/dist/loader/css/react-spinner-loader.css"
+
 type Page = {
   index: number
   users: UserType[]
@@ -29,6 +32,7 @@ type AppState = {
   pages: Page[]
   currentPageIndex: number // arrays start at 0 but pageIndexes start at 1. change my mind
   resultsCount: number // this is not the total results, only the ones we've fetched (limit 100)
+  isLoading: boolean
 }
 
 class App extends React.Component<{}, AppState> {
@@ -36,7 +40,12 @@ class App extends React.Component<{}, AppState> {
 
   constructor(props: {}) {
     super(props)
-    this.state = { pages: [], currentPageIndex: 1, resultsCount: 0 }
+    this.state = {
+      pages: [],
+      currentPageIndex: 1,
+      resultsCount: 0,
+      isLoading: false,
+    }
     this.setResultsDebounced = debounce(this.setResults, 250)
   }
 
@@ -49,6 +58,8 @@ class App extends React.Component<{}, AppState> {
   }
 
   setResults = async (value: string) => {
+    this.setState({ isLoading: true, pages: [], resultsCount: 0 })
+
     const users = await queryGithub({
       query: value,
       firstElements: BATCH_LENGTH,
@@ -76,11 +87,12 @@ class App extends React.Component<{}, AppState> {
       pages: pagesWithIndex,
       currentPageIndex: 1,
       resultsCount: users.length,
+      isLoading: false,
     })
   }
 
   render() {
-    const { pages, currentPageIndex, resultsCount } = this.state
+    const { pages, currentPageIndex, resultsCount, isLoading } = this.state
     const currentPage = pages.find(
       (page: Page) => page.index === currentPageIndex
     )
@@ -97,7 +109,9 @@ class App extends React.Component<{}, AppState> {
         </Header>
         <GithubSearch callback={this.setResultsDebounced} />
         <ResultsCount resultsCount={resultsCount} />
+        <LoaderComponent isLoading={isLoading} />
         {currentPage && <UsersView users={currentPage.users} />}
+
         {currentPage && (
           <Pagination
             currentIndex={currentPageIndex}
